@@ -17,8 +17,14 @@ git checkout main &> /dev/null && git pull > /dev/null
 echo "> Generating changelog"
 changelog=$(git log --pretty="%h - %s (%an)" "$(git describe --tags --abbrev=0)"..HEAD)
 
-## Get latest tag
-lastReleaseVersion=$(git describe --tags --abbrev=0)
+## Check if tags exist, otherwise assume this is the very first tag and take all the commit history
+if ($(git describe --tags --abbrev=0 > /dev/null 2>&1)); then
+    lastReleaseVersion=$(git describe --tags --abbrev=0)
+    changelog=$(git log --pretty="%h - %s (%an)" "$lastReleaseVersion"..HEAD)
+else
+    lastReleaseVersion="-none-" 
+    changelog=$(git log --pretty="%h - %s (%an)" HEAD)
+fi
 
 echo ""
 printf "  ${bold}version${normal} (curr: ${bold}$lastReleaseVersion${normal}): "; read newVersion
