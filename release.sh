@@ -9,9 +9,9 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 echo ""
 
-## Ensure latest master
-echo "> Checking out the latest master"
-git checkout master &> /dev/null && git pull > /dev/null
+## Ensure latest main
+echo "> Checking out the latest main"
+git checkout main &> /dev/null && git pull > /dev/null
 
 ## Ensure latest changelog
 echo "> Generating changelog"
