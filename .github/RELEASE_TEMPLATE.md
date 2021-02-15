@@ -1,0 +1,3 @@
+#DESCRIPTION#
+
+## [Changelog](#REPOSITORY_URL#/compare/#LATEST_VERSION#...#NEW_VERSION#)
