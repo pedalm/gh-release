@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-### Edit the following according to your repository
-repositoryUrl="https://github.com/pedalm/gh-release"
-
 # Helpers for echo
 bold=$(tput bold)
 normal=$(tput sgr0)
@@ -20,7 +17,7 @@ if (git describe --tags --abbrev=0 > /dev/null 2>&1); then
     lastReleaseVersion=$(git describe --tags --abbrev=0)
     changelog=$(git log --pretty="%h - %s (%an)" "$lastReleaseVersion"..HEAD)
 else
-    lastReleaseVersion="-none-" 
+    lastReleaseVersion="-none-"
     changelog=$(git log --pretty="%h - %s (%an)" HEAD)
 fi
 
@@ -30,7 +27,14 @@ printf "  ${bold}description${normal}: "; read description
 echo ""
 
 ## Get the release template
-template=$(<./.github/RELEASE_TEMPLATE.md)
+BASEDIR=$(dirname $0)
+template=$(<${BASEDIR}/.github/RELEASE_TEMPLATE.md)
+
+## Get the repository's URL
+repositoryUrl=$(git config --get remote.origin.url)
+repositoryUrl=${repositoryUrl//"git@"/"https://"}
+repositoryUrl=${repositoryUrl//"github.com:"/"github.com/"}
+repositoryUrl=${repositoryUrl//".git"/""}
 
 ## Replace appropriate variables
 template=${template//"#DESCRIPTION#"/$description}
